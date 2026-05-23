@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Vehicle Detection</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* REMOVE ANY EXTRA DESIGN */
+body::before,
+body::after {
+  display: none !important;
+}
+
+/* BODY */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #020617;
+  color: #e5e7eb;
+}
+
+/* CONTAINER */
+.container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* CARD */
+.card {
+  width: 100%;
+  max-width: 500px;
+  padding: 30px;
+  border-radius: 12px;
+  background: #0b1220;
+  border: 1px solid rgba(0, 212, 255, 0.15);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+}
+
+/* TITLE */
+h1 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 25px;
+  color: #00d4ff;
+}
+
+/* UPLOAD AREA */
+.upload-zone {
+  border: 2px dashed #00d4ff;
+  padding: 25px;
+  text-align: center;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.upload-zone:hover {
+  background: rgba(0,212,255,0.08);
+}
+
+.upload-zone h3 {
+  font-size: 18px;
+}
+
+.upload-zone p {
+  font-size: 14px;
+  color: #9ca3af;
+  margin-top: 5px;
+}
+
+/* HIDE INPUT */
+input[type="file"] {
+  display: none;
+}
+
+/* FILE NAME */
+#file-name {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #00d4ff;
+  word-break: break-all;
+}
+
+/* PREVIEW */
+#preview {
+  margin-top: 10px;
+  width: 100%;
+  border-radius: 8px;
+  display: none;
+}
+
+/* BUTTON */
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 20px;
+  border-radius: 8px;
+  border: none;
+  background: #00d4ff;
+  color: black;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #00ffcc;
+}
+
+/* RESULT */
+.result {
+  margin-top: 25px;
+}
+
+/* RESULT BOX */
+.result-box {
+  background: #020617;
+  border: 1px solid rgba(0,255,150,0.2);
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+/* RESULT HEAD */
+.result-box h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #00ffcc;
+}
+
+/* IMAGE */
+.result-box img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+/* LIST */
+ul {
+  padding-left: 18px;
+}
+
+li {
+  margin: 5px 0;
+  color: #00ff88;
+  font-size: 14px;
+}
+
+/* MOBILE */
+@media (max-width: 480px) {
+  .card {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<h1>Vehicle Detection System</h1>
+
+<form method="POST" enctype="multipart/form-data">
+
+<label class="upload-zone">
+  <input type="file" name="image" id="file-input" accept="image/*" required>
+  <h3>Upload Image</h3>
+  <p>Click to select vehicle image</p>
+  <p id="file-name"></p>
+  <img id="preview">
+</label>
+
+<button type="submit">Detect Vehicles</button>
+
+</form>
+
+{% if filename %}
+<div class="result">
+
+<div class="result-box">
+<h3>Uploaded Image</h3>
+<img src="{{ url_for('static', filename='uploads/' + filename) }}">
+</div>
+
+<div class="result-box">
+{% if names %}
+<h3>Detected Vehicles</h3>
+<ul>
+{% for name in names %}
+<li>✔ {{ name }}</li>
+{% endfor %}
+</ul>
+{% else %}
+<p style="color:gray;">No vehicles detected</p>
+{% endif %}
+</div>
+
+</div>
+{% endif %}
+
+</div>
+
+</div>
+
+<script>
+
+const input = document.getElementById("file-input");
+const preview = document.getElementById("preview");
+const fileName = document.getElementById("file-name");
+
+input.addEventListener("change", function () {
+  const file = this.files[0];
+
+  if (file) {
+    fileName.textContent = file.name;
+    preview.src = URL.createObjectURL(file);
+    preview.style.display = "block";
+  }
+});
+
+</script>
+
+</body>
+</html>
